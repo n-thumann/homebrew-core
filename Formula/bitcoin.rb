@@ -30,7 +30,10 @@ class Bitcoin < Formula
 
   on_linux do
     depends_on "util-linux" => :build # for `hexdump`
+    depends_on "gcc" => :build
   end
+
+  fails_with gcc: "5"
 
   def install
     ENV.delete("SDKROOT") if MacOS.version == :el_capitan && MacOS::Xcode.version >= "8.0"
