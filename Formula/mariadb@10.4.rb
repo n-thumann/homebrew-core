@@ -46,15 +46,6 @@ class MariadbAT104 < Formula
   uses_from_macos "ncurses"
   uses_from_macos "zlib"
 
-  on_macos do
-    # Need patch to remove MYSQL_SOURCE_DIR from include path because it contains
-    # file called VERSION
-    # https://github.com/Homebrew/homebrew-core/pull/76887#issuecomment-840851149
-    # Originally reported upstream at https://jira.mariadb.org/browse/MDEV-7209,
-    # but only partially fixed.
-    patch :DATA
-  end
-
   on_linux do
     depends_on "gcc"
     depends_on "linux-pam"
@@ -215,19 +206,3 @@ class MariadbAT104 < Formula
     system "#{bin}/mysqladmin", "--port=#{port}", "--user=root", "--password=", "shutdown"
   end
 end
-
-__END__
-diff --git a/storage/mroonga/CMakeLists.txt b/storage/mroonga/CMakeLists.txt
-index 555ab248751..cddb6f2f2a6 100644
---- a/storage/mroonga/CMakeLists.txt
-+++ b/storage/mroonga/CMakeLists.txt
-@@ -215,8 +215,7 @@ set(MYSQL_INCLUDE_DIRS
-   "${MYSQL_REGEX_INCLUDE_DIR}"
-   "${MYSQL_RAPIDJSON_INCLUDE_DIR}"
-   "${MYSQL_LIBBINLOGEVENTS_EXPORT_DIR}"
--  "${MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR}"
--  "${MYSQL_SOURCE_DIR}")
-+  "${MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR}")
-
- if(MRN_BUNDLED)
-   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")nd
