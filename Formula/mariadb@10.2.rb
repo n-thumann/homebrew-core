@@ -46,15 +46,6 @@ class MariadbAT102 < Formula
   uses_from_macos "ncurses"
   uses_from_macos "zlib"
 
-  on_macos do
-    # Need patch to remove MYSQL_SOURCE_DIR from include path because it contains
-    # file called VERSION
-    # https://github.com/Homebrew/homebrew-core/pull/76887#issuecomment-840851149
-    # Originally reported upstream at https://jira.mariadb.org/browse/MDEV-7209,
-    # but only partially fixed.
-    patch :DATA
-  end
-
   # This upstream commit was added for MariaDB 10.3+, but not 10.2. If it is not
   # added in the next release, we should open an upstream PR to do so.
   on_linux do
@@ -63,11 +54,6 @@ class MariadbAT102 < Formula
   end
 
   fails_with gcc: "5"
-
-  patch do
-    url "https://github.com/MariaDB/server/commit/9d5967f74bd0c471153c80ced240e586721e0e03.patch?full_index=1"
-    sha256 "f1b359c49dfd79182febe67f202bb13a8eaae66ca8474d197c0d6e56845f25d6"
-  end
 
   def install
     # Set basedir and ldata so that mysql_install_db can find the server
@@ -226,19 +212,3 @@ class MariadbAT102 < Formula
     system "#{bin}/mysqladmin", "--port=#{port}", "--user=root", "--password=", "shutdown"
   end
 end
-
-__END__
-diff --git a/storage/mroonga/CMakeLists.txt b/storage/mroonga/CMakeLists.txt
-index 555ab248751..cddb6f2f2a6 100644
---- a/storage/mroonga/CMakeLists.txt
-+++ b/storage/mroonga/CMakeLists.txt
-@@ -215,8 +215,7 @@ set(MYSQL_INCLUDE_DIRS
-   "${MYSQL_REGEX_INCLUDE_DIR}"
-   "${MYSQL_RAPIDJSON_INCLUDE_DIR}"
-   "${MYSQL_LIBBINLOGEVENTS_EXPORT_DIR}"
--  "${MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR}"
--  "${MYSQL_SOURCE_DIR}")
-+  "${MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR}")
-
- if(MRN_BUNDLED)
-   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
