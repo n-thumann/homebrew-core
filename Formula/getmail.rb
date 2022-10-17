@@ -19,7 +19,7 @@ class Getmail < Formula
     sha256 cellar: :any_skip_relocation, mojave:         "c729f338af43aebe206c4b0cbddebd1d1619d94a8277e4f1dc43908fba631b8b"
   end
 
-  deprecate! date: "2022-10-16", because: "depends on Python 2"
+  disable! date: "2023-04-16", because: "depends on Python 2"
 
   def install
     libexec.install %w[getmail getmail_fetch getmail_maildir getmail_mbox]
